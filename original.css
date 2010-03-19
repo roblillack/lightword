@@ -1,6 +1,7 @@
 #wrapper{width:811px;}
 #header{background:transparent url(images/content_top.png) no-repeat;}
 #top_bar{padding-top:74px;}
+#rss-feed{ position:relative;top:35px; }
 #content{background: #FFF url(images/content_middle.png) repeat-y;width:769px;}
 #content-body{width:547px;}
 #footer{background:transparent url(images/content_bottom.png) no-repeat;}

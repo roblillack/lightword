@@ -7,6 +7,8 @@
 <h2><a title="<?php the_title(); ?>" href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 <?php edit_post_link(__('Edit this post','lightword'), '<span class="edit_content">', '</span>'); ?>
 <?php lw_simple_date(); ?>
+<?php lw_adsense_spot(); // you can add the adsense code via theme settings ?>
+<?php if (  (function_exists('has_post_thumbnail')) && (has_post_thumbnail())  ) { the_post_thumbnail(array( 200,200 ), array( 'class' => 'alignleft' )); } ?>
 <?php the_content(''); ?>
 <?php if(function_exists('wp_print')) { print_link(); } ?>
 <?php wp_link_pages('before=<div class="nav_link">'.__('PAGES','lightword').': &after=</div>&next_or_number=number&pagelink=<span class="page_number">%</span>'); ?>
@@ -18,7 +20,7 @@
 </div>
 <?php endif; ?>
 
-<?php if ($lw_post_author == "true" && is_attachment() != TRUE) : ?>
+<?php if ($lw_post_author == "Single page" || $lw_post_author == "Both" && is_attachment() != TRUE) : ?>
 <div class="about_author clear">
 <span class="alignleft"><?php echo get_avatar( get_the_author_id(), '28' );   ?></span>
 <div class="alignleft" style="width:470px;"><h4><?php _e('About','lightword'); ?> <a href="<?php the_author_url(); ?> "><?php the_author(); ?></a></h4><?php the_author_description(); if(!get_the_author_description()) _e('No description. Please complete your profile.','lightword'); ?></div><div class="clear"></div>

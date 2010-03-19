@@ -1,12 +1,11 @@
 /*
 Theme Name: LightWord
-Theme URI: http://www.andreiwebdesign.com/lightword-theme
-Description: Simply clever theme with two columns, right-sidebar, fixed-width, widget-ready and threaded comments. Compatible with Wordpress 2.8, valid XHTML & CSS. Stay updated!
+Theme URI: http://www.lightword-theme.net/
+Description: Simply clever theme with two or three columns, adsense support, fixed-width, widget-ready and threaded comments. Compatible with Wordpress 2.8+ (including 2.9.x), valid XHTML & CSS. Cufon text replacement is back!
 Author: Andrei Luca
-Author URI: http://www.andreiwebdesign.com
 Template: lightword
-Version: 1.9.1
-Tags: white, light, two-columns, right-sidebar, fixed-width, theme-options, translation-ready, threaded-comments, custom-header
+Version: 1.9.9.1
+Tags: white, light, two-columns, right-sidebar, fixed-width, theme-options, translation-ready, threaded-comments, custom-header,three-columns
 .
 Released under the <a href="http://www.opensource.org/licenses/gpl-license.php">GPL</a>.
 .
@@ -27,18 +26,18 @@ h3{font-size:1.8em;}
 h4{font-size:1.5em;}
 h5{font-size:1.4em;}
 h6{font-size:1.3em;}
-img,img a{border:1px solid #EEE;padding:2px;margin-left:-2px;}
 hr{color:#DCDCDB;background-color:#DCDCDB;height:1px;border:0px;}
 pre{width:100%; white-space:pre-wrap;}
 
 /* LAYOUT */
 #wrapper{margin:0 auto;text-align:left;}
 h1#logo,h1#logo a{font-family:Helvetica,Georgia;padding:0;margin-top:7px;font-size:36px;color:#FFF;text-decoration:none;text-transform:uppercase;}
-h1#logo small{color:#FFF;font-size:12px;display:block;margin:-7px 2px 1px;height:20px;}
+h1#logo small{color:#FFF;font-size:12px;display:block;margin:-2px 2px 1px;height:20px;}
 h1#logo small a{font-size:12px;border-bottom:1px solid #FFF;}
-#rss-feed{float:right;width:190px;font-weight:700;position:relative;top:34px;left:7px;color:#FFF;text-decoration:none;}
+#rss-feed{float:right;width:190px;font-weight:700;position:relative;left:7px;color:#FFF;text-decoration:none;}
 #header{height:113px;}
-#top{cursor:pointer;display:block;margin-left:5px;position:relative;bottom:-55px;margin-top:-55px;min-height:56px;}
+#top{z-index:-1;cursor:pointer;display:block;margin-left:5px;position:relative;bottom:-55px;margin-top:-55px;min-height:56px;}
+#top_cufon{cursor:pointer;display:block;margin-left:5px;position:relative;bottom:-55px;margin-top:-55px;min-height:56px;}
 #top strong{display:none;}
 #top_bar{padding:72px 23px 0 20px;}
 #searchform{float:right;width:191px;height:26px;background:url(images/searchbox.png) no-repeat;position:relative;top:1px;}
@@ -49,7 +48,8 @@ h1#logo small a{font-size:12px;border-bottom:1px solid #FFF;}
 * html #content-body{float:left;margin-right:24px;} *+html #content-body{float:left;margin-right:28px;}
 #footer{height:8px;}
 #footer .text{color:#8D837B;font-size:10px;display:block;padding:12px;}
-#footer .top{position:relative;right:5px;top:-5px;display:block;float:right;}
+#footer .top{position:relative;right:5px;top:-5px;display:inline;float:right;}
+* html #footer .top{top:-20px;} *+html #footer .top{top:-20px;}
 #footer em, #footer em a{font-style:normal;color:#41413E;}
 
 /* FRONT MENU */
@@ -64,11 +64,11 @@ ul#front_menu{float:left;text-transform:uppercase;position:relative;top:-4px;}
 #front_menu li a:hover span,#front_menu li a.s span{background-position:right bottom;}
 * html #front_menu li a,* html #front_menu li a span{width:1%;white-space:nowrap;cursor:pointer;}
 * html #front_menu li a span{position:relative;}
-#front_menu ul {position:relative;z-index:3;}
 #front_menu li {background:none;float:left; position:relative;}
-#front_menu ul {width:200px;position:absolute;display:none; background:#FFF;border-left:1px solid #ACACAB;border-right:1px solid #ACACAB;border-bottom:1px solid #ACACAB;}
+#front_menu ul {width:200px;position:absolute;display:none; background:#FFF;border-left:1px solid #ACACAB;border-right:1px solid #ACACAB;border-bottom:1px solid #ACACAB;-moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;-webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius:5px;}
 #front_menu ul li a, #front_menu ul li a span{margin:-3px -1px;height:auto;background:none;}
 #front_menu li ul a {width:200px; float:left; white-space:nowrap;}
+#front_menu li ul a:hover{text-decoration:underline;}
 #front_menu ul ul {top:auto;}
 #front_menu li ul ul {left:1em; }
 #front_menu li:hover ul ul, #front_menu li:hover ul ul ul, #front_menu li:hover ul ul ul ul {display:none;}
@@ -84,10 +84,15 @@ blockquote{margin:20px 10px 10px 5px;border-left:4px solid #DDD;padding:0 5px 0 
 .alignright,img.alignright{float:right;margin:5px 0 5px 10px;}
 .aligncenter,div.aligncenter,img.aligncenter{text-align:center;display:block;margin:10px auto;}
 abbr, acronym, span.abbr{cursor:help;border-bottom:1px dotted #000;}
-#content-body table { border-collapse:collapse; width:100%; border:0; }
-#content-body table { margin:0 0 1em 1px; }
-#content-body td, .post th { border:1px solid #DCDCDB; padding:10px; }
-#content-body th { background:#EEE; font:18px normal; }
+table{margin:.5em 0 1em;}
+table td,table th{text-align:left;border-right:1px solid #fff;padding:.4em .8em;}
+table th{background-color:#5e5e5e;color:#fff;text-transform:uppercase;font-weight:bold;border-bottom:1px solid #e8e1c8;}
+table td{background-color:#eee;}
+table th a{color:#d6f325;}
+table th a:hover{color:#fff;}
+table tr.even td{background-color:#ddd;}
+table tr:hover td{background-color:#fff;}
+table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hover td{border:0;background:none;background-color:transparent;}
 .wp_syntax { width:auto; }
 .wp_syntax table { border:0 !important; }
 .wp_syntax table td { border:0 !important; }
@@ -96,7 +101,7 @@ img.wp-smiley{border:0px;vertical-align:middle;}
 /* CONTENT */
 #content-body ul,#content-body ol{margin:15px 30px;font-size:12px;}
 #content-body ul li{list-style:circle;margin-bottom:4px;}
-.hentry{min-height:150px;height:auto!important;margin-bottom:1em;}
+.hentry{height:auto!important;margin-bottom:1em;}
 .sticky h2 a{color:red;}
 .comm_date{background:transparent url(images/date_comm_box.png) no-repeat;height:100px;width:57px;position:absolute;text-align:center;margin:0 0 0 -72px;z-index:2;}
 .only_date{background:transparent url(images/data_box.png) no-repeat !important;height:67px !important;}
@@ -124,8 +129,8 @@ img.wp-smiley{border:0px;vertical-align:middle;}
 .content-sidebar ul{list-style:none;width:191px;padding:2px;}
 .content-sidebar li{list-style:none;}
 * html .content-sidebar ul{width:160px;}
-.content-sidebar ul li{display:block;color:#9D9793;line-height:16px;padding:4px 0 4px;border-bottom:1px solid #EEE;width:185px;}
-.content-sidebar ul ul li{border:0px;padding-bottom:0;width:140px;}
+.content-sidebar ul li,.content-sidebar-2 ul li{display:block;color:#9D9793;line-height:16px;padding:4px 0 4px;border-bottom:1px solid #EEE;width:185px;}
+.content-sidebar ul ul li,.content-sidebar-2 ul ul li{border:0px;padding-bottom:0;width:140px;}
 .content-sidebar ul li.page_item ul li.page_item , .content-sidebar ul li.cat-item ul.children li.cat-item{background:url(images/arrow.gif) 0 11px no-repeat;padding-left:11px;margin-top:-3px;}
 .content-sidebar ul li.page_item ul li.page_item ul li.page_item, .content-sidebar ul li.cat-item ul.children li.cat-item ul.children li.cat-item{background:url(images/arrow.gif) 0 11px no-repeat;padding-left:12px;}
 .content-sidebar ul li a:hover,.content-sidebar .recentcomments a:hover{color:#AAA;}
@@ -136,7 +141,7 @@ img.wp-smiley{border:0px;vertical-align:middle;}
 
 /* COMMENTS */
 #content-body input{padding:3px;border:1px solid #E5E2E0;margin-bottom:2px;}
-#content-body textarea{border:1px solid #E5E2E0;width:98.6%;height:100px;padding:5px;font: 12px Verdana;}
+#content-body textarea{border:1px solid #E5E2E0;width:97.5%;height:100px;padding:5px;font: 12px Verdana;}
 #content-body input#submit {width: 88px;height: 25px;border: 0px;background:#2C2C29 url(images/submit_btn.png) no-repeat;font: bold 12px Helvetica,Georgia,serif;color:#FFF;text-align:center;cursor:pointer;}
 #comentarii ol.commentlist{width:100%;margin:0;padding:0;font-size:11px;}
 ol.commentlist{list-style:none;}
@@ -183,13 +188,13 @@ div.selected{background-color:#FFF;color:#2C2C29;}
 .next_previous_links_comments{margin-top:10px;border-bottom:1px solid #DDD;background-color:#F5F5F5;padding:0 5px;}
 
 /* WIDGETS */
-#wp-calendar {font-size: 1.2em;empty-cells: show;line-height:5px;margin-top:10px;margin-left:-5px;}
+#wp-calendar {font-size: 1.2em;empty-cells: show;line-height:5px;margin-top:10px;}
 #wp-calendar a {font-size: 1.0em;display: block;font-weight: bold;}
 #wp-calendar #next a {padding-right: 10px;text-align: right;}
 #wp-calendar #prev a {padding-left: 10px;text-align: left;}
-#wp-calendar caption {padding:2px 0;margin: 8px 0;text-transform: uppercase;letter-spacing: 0.3em;font-weight: lighter;font-size: .8em;color: #444;text-align: right;}
-#wp-calendar th {padding: 4px 5px 4px 6px;font-weight: lighter;font-size: .8em;color: #666;text-align: right;background: #f4f4f4;}
-#wp-calendar td {padding: 4px 5px 4px 6px;text-align: right;}
+#wp-calendar caption {padding:2px 5px;margin: 8px 0;text-transform: uppercase;font-weight: lighter;font-size: .8em;color: #444;text-align: left;}
+#wp-calendar th {padding: 4px 10px 4px 0px;font-weight: lighter;font-size: .8em;color: #666;text-align: right;background: #f4f4f4;}
+#wp-calendar td {padding: 4px 10px 4px 0px;text-align: right;}
 #wp-calendar td#today {background: #e0e0e0;}
 #wp-calendar td#prev a {padding: 0;text-align: left;font-weight: normal;}
 #wp-calendar td#next a {padding: 0;text-align: right;font-weight: normal;}
@@ -207,7 +212,8 @@ ul.hide{list-style-type:none;display:none;}
 .post-edit-link{display:block;background-color:#F5F5F5;margin-bottom:1em;padding:5px;color:#B6B6B5;}
 .post-edit-link:hover{background-color:#FFFFD3;color:#2C2C29;}
 .comment-edit-link{background-color:#EFEFEF;padding:1px 5px;color:#999999;border-left:1px solid #DDD;}
-.about_author{border-top:1px solid #DDD;background-color:#F5F5F5;padding:10px;margin-top:10px;}
+.about_author{background-color:#F5F5F5;padding:5px 10px;}
+.about_author h4{ font-size:12px;padding-top:3px; }
 .moderation{font-size:80%;}
 #breadcrumbs{background-color:#F5F5F5;padding:5px;}
 ol.snap_nav{list-style:none;display:block;}
