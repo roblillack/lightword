@@ -42,7 +42,7 @@ $oddcomment = 'alt ';
 <?php endif; ?>
 <?php endif; ?>
 
-<?php if ('open' == $post->comment_status) : ?>
+ <?php if ($comments || comments_open()): ?>
 
 <br/><div id="respond">
 <h2 style="background:transparent;"><?php comment_form_title( __('Leave a comment', 'lightword'), 'Reply' ); ?></h2>
@@ -51,7 +51,7 @@ $oddcomment = 'alt ';
 <p><?php printf(__('You must be <a href="%s">logged in</a> to post a comment.','lightword'), get_option('siteurl')."/wp-login.php?redirect_to=".urlencode(get_permalink()));?></p>
 <?php else : ?>
 
-<form action="<?php bloginfo('url'); ?>/wp-comments-post.php" method="post" id="commentform">
+<form action="<?php bloginfo('wpurl'); ?>/wp-comments-post.php" method="post" id="commentform">
 <?php if ( $user_ID ) : ?>
 <p><?php printf(__('Logged in as %s.','lightword'), '<a href="'.get_option('siteurl').'/wp-admin/profile.php">'.$user_identity.'</a>'); ?> <a href="<?php echo wp_logout_url(get_permalink()); ?>" title="<?php _e('Log out of this account','lightword') ?>"><?php _e('Log out &raquo;','lightword'); ?></a></p>
 
@@ -60,7 +60,7 @@ $oddcomment = 'alt ';
 <?php else : ?>
 
 
-<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="1"></textarea></p>
+<p><textarea name="comment" id="comment" rows="10" tabindex="1"></textarea></p>
 <p><input type="text" name="author" id="author" value="<?php echo $comment_author; ?>" size="22" tabindex="1" />
 <label for="author"><small><?php _e('Name','lightword'); ?> <?php if ($req) _e('(required)','lightword'); ?></small></label></p>
 

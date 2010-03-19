@@ -4,12 +4,13 @@
 <span class="text">
 <?php
 $blog_name = '<a href="'.get_bloginfo('url').'">'.get_bloginfo('name').'</a>';
-printf(__('Copyright %s %s %s &middot; Powered by %s <br/> Lightword Theme by %s &middot; presented by %s.', 'lightword'),'&copy;',date('Y'),$blog_name,'<a href="http://www.wordpress.org" title="Wordpress" target="_blank" ref="nofollow">Wordpress</a>','<a title="Andrei Luca" target="_blank" href="http://www.andreiwebdesign.com/">Andrei Luca</a>','<a title="Kinder-Blog" target="_blank" href="http://www.kinder-blog.com">Kinder Blog</a>');
-?>
+printf(__('Copyright %s %s %s &middot; Powered by %s <br/>','lightword'),'&copy;',date('Y'),$blog_name,'<a href="http://www.wordpress.org" title="WordPress" target="_blank">WordPress</a>')
+;?>
+<?php _e('<a href="http://www.lightword-theme.net/" target="_blank" title="Lightword Theme">Lightword Theme</a> by Andrei Luca','lightword')
+;?>
 </em>
 
 <a title="<?php _e('Go to top','lightword'); ?>" class="top" href="#top"><?php _e('Go to top','lightword'); ?> &uarr;</a>
-
 </span>
 </div>
 <script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/menu.js"></script>

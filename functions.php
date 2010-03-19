@@ -3,12 +3,8 @@ if (!empty($_SERVER['SCRIPT_FILENAME']) && 'functions.php' == basename($_SERVER[
 die ('Please do not load this page directly. Thanks!');
 
 $themename = "LightWord";
-$themeversion = "1.9.1";
 $shortname = "lw";
 $top_header_image_path = get_bloginfo('template_directory')."/images/header-image.png";
-
-if ( function_exists('register_sidebar') )
-register_sidebar(array('name' =>'Sidebar','before_widget' => '','after_widget' => '','before_title' => '<h3>','after_title' => '</h3>'));
 
 $options = array (
 
@@ -29,6 +25,12 @@ $options = array (
             "std" => __('Enabled','lightword'),
             "type" => "select"),
 
+    array(  "name" => __('Christmas Joy','lightword'),
+			"desc" => __('Because its Christmas! Happy Holidays and thanks for downloading LightWord theme','lightword'),
+            "id" => $shortname."_christmas_joy",
+            "type" => "checkbox",
+            "std" => "false"),
+
     array(  "name" => __('Disable comments on pages','lightword'),
 			"desc" => __('Check this box if you would like to DISABLE COMMENTS on pages','lightword'),
             "id" => $shortname."_disable_comments",
@@ -47,11 +49,12 @@ $options = array (
             "type" => "header_image",
             "std" => "56"),
 
-    array(  "name" => __('About author feature','lightword'),
-			"desc" => __('Add information about post author on post footer','lightword'),
+    array(  "name" => __('About author feature', 'lightword'),
+            "desc" => __('Add information about post author','lightword'),
             "id" => $shortname."_post_author",
-            "type" => "checkbox",
-            "std" => "false"),
+            "options" => array(__('Disabled','lightword'), __('Main page','lightword'), __('Single page','lightword'), __('Both','lightword')),
+            "std" => __('Disabled','lightword'),
+            "type" => "select"),
 
     array(  "name" => __('Enjoy this post feature','lightword'),
 			"desc" => __('Check this box if you would like to ACTIVATE <em>Enjoy this post</em> feature','lightword'),
@@ -113,10 +116,22 @@ $options = array (
             "std" => __('Enabled','lightword'),
             "type" => "select"),
 
+    array(  "name" => __('Sidebar settings', 'lightword'),
+            "id" => $shortname."_sidebar_settings",
+            "desc" => __('Two sidebars option is available on Wider layout only','lightword'),
+            "options" => array(__('One sidebar','lightword'), __('Two sidebars','lightword')),
+            "std" => __('One sidebar','lightword'),
+            "type" => "select"),
 
-    array(  "name" => 'Custom CSS',
+    array(  "name" => __('Custom CSS', 'lightword'),
 			"desc" => __('Put your custom css code here','lightword'),
             "id" => $shortname."_custom_css",
+            "type" => "textarea",
+            "std" => ""),
+
+    array(  "name" => __('AdSense', 'lightword'),
+			"desc" => __('Copy your AdSense code and paste it here.','lightword'),
+            "id" => $shortname."_adsense_spot",
             "type" => "textarea",
             "std" => ""),
 
@@ -134,10 +149,10 @@ if ( $_GET['page'] == basename(__FILE__) ) {
 if ( 'save' == $_REQUEST['action'] ) {
 
 foreach ($options as $value) {
-update_option( $value['id'], $_REQUEST[ $value['id'] ] ); }
+update_option( $value['id'], stripslash_check($_REQUEST[ $value['id'] ]) ); }
 
 foreach ($options as $value) {
-if( isset( $_REQUEST[ $value['id'] ] ) ) { update_option( $value['id'], $_REQUEST[ $value['id'] ]  ); } else { delete_option( $value['id'] ); } }
+if( isset( $_REQUEST[ $value['id'] ] ) ) { update_option( $value['id'], stripslash_check($_REQUEST[ $value['id'] ])  ); } else { delete_option( $value['id'] ); } }
 header("Location: themes.php?page=functions.php&saved=true");
 die;
 
@@ -175,25 +190,6 @@ if ( $_REQUEST['reset'] ) { echo '<div id="message" class="updated fade"><p><str
 </div></div>
 
 <div class="stuffbox">
-<h3><label for="link_url"><?php _e('Theme version check','lightword'); ?> (<?php echo $themeversion; ?>)</label></h3>
-<div class="inside">
-<p>
-<?php
-$vcheck_url = "http://wp.kis.ro/lightword.txt";
-define('REMOTE_VERSION', $vcheck_url);
-$remoteVersion = trim(@file_get_contents(REMOTE_VERSION));
-$remoteVersion = explode("||", $remoteVersion);
-if (!@file_get_contents($vcheck_url)) {
-_e('Version check failed.','lightword');
-}else{
-if(version_compare($themeversion, $remoteVersion[0], '>=')){ _e('Cool! You have the latest version.','lightword'); echo "<br/><a style=\"color:red;text-decoration:none;\" href=\"http://students.info.uaic.ro/~andrei.luca/blog/lightword-theme-updates.html#v$themeversion\">&rarr; "; _e('view changelog','lightword'); echo "</a>";
-}else{ _e('You have','lightword'); echo ": ".$themeversion."<br/>"; _e('Latest version','lightword'); echo ": <strong>".$remoteVersion[0]."</strong><br/><br/><strong>What's new? </strong><br/><small>".$remoteVersion[1]."</small><br/><a style=\"color:red;font-weight:700;\" href=\"http://wordpress.org/extend/themes/download/lightword.$remoteVersion[0].zip\">"; _e('Get the latest version','lightword'); echo "</a>"; echo " / <a style=\"color:red;font-weight:700;\" href=\"http://students.info.uaic.ro/~andrei.luca/blog/lightword-theme-updates.html#v$remoteVersion[0]\">"; _e('view changelog','lightword'); echo "</a>";}
-}
-?>
-</p>
-</div></div>
-
-<div class="stuffbox">
 <h3><label for="link_url"><?php _e('General settings','lightword'); ?></label></h3>
 <div class="inside">
 <form method="post">
@@ -211,7 +207,7 @@ if(version_compare($themeversion, $remoteVersion[0], '>=')){ _e('Cool! You have 
 <?php break;case 'textarea':?>
 
 <tr><td width="20%" rowspan="2" valign="middle"><strong><?php echo $value['name']; ?></strong></td>
-<td width="80%"><textarea name="<?php echo $value['id']; ?>" style="width:400px; height:200px;" type="<?php echo $value['type']; ?>" cols="" rows=""><?php if ( get_settings( $value['id'] ) != "") { echo get_settings( $value['id'] ); } else { echo $value['std']; } ?></textarea></td></tr>
+<td width="90%"><textarea name="<?php echo $value['id']; ?>" style="width:500px; height:150px;" type="<?php echo $value['type']; ?>" cols="" rows=""><?php if ( get_settings( $value['id'] ) != "") { echo get_settings( $value['id'] ); } else { echo $value['std']; } ?></textarea></td></tr>
 <tr><td><small><?php echo $value['desc']; ?></small></td>
 </tr><tr></tr><tr><td colspan="2">&nbsp;</td></tr>
 
@@ -261,7 +257,7 @@ if(version_compare($themeversion, $remoteVersion[0], '>=')){ _e('Cool! You have 
 </form>
 
 <div class="stuffbox">
-<h3><label for="link_url"><?php _e('Search for help','lightword'); ?> (<a href="http://students.info.uaic.ro/~andrei.luca/blog/">blog</a> <?php _e('or','lightword'); ?> <a href="http://twitter.com/andreiluca">twitter</a>)</label></h3>
+<h3><label for="link_url"><?php _e('Search for help','lightword'); ?> (<a href="http://www.lightword-theme.net/">blog</a> <?php _e('or','lightword'); ?> <a href="http://twitter.com/andreiluca">twitter</a>)</label></h3>
 <div class="inside">
 <?php
 require_once(ABSPATH . WPINC . '/rss.php');
@@ -298,7 +294,7 @@ echo "</p>";
 <h3><label for="link_url"><?php _e('What is Cufon?','lightword'); ?> (<a href="http://cufon.shoqolate.com/generate/">website</a>)</label></h3>
 <div class="inside">
 <p>&sup1;Cuf&oacute;n is a Javascript Dynamic Text Replacement, like sIFR without flash plugin, just javascript.<br/>
-<br/>&sup2;Extra Cuf&oacute;n contains (~<b>300kb js file</b>): Basic latin, uppercase, lowercase, numerals, punctuation, <br/>Latin-1 Supplement, Latin Extended-A, Cyrillic Alphabet, Russian Alphabet, Greek and Coptic; usefull for some accents and special characters.
+<br/>&sup2;Extra Cuf&oacute;n contains (~<b>300kb js file</b>): Basic latin, uppercase, lowercase, numerals, punctuation, <br/>Latin-1 Supplement, Latin Extended-A, Cyrillic Alphabet, Russian Alphabet, Greek and Coptic; <strong>usefull for some accents and special characters</strong>.
 <br/><br/>Korean characters are not supported (11000+ glyps is a bit too much - enormous file -> slow loading).</p>
 </div></div>
 <form method="post" style="float:right;">
@@ -383,12 +379,28 @@ if ( !function_exists('fb_update_comment_type_cache') ) {
         add_filter('the_posts', 'fb_update_comment_type_cache');
 }
 
+/** Added by Steven L of ISomehowHate.com
+| Fixes an issue that can occur when a user has magic_quotes switched to on.
+| This ensures no \'s are added to the code which causes Google Adsense and perhaps other things to fail.
+| Changes Made to Existing Code: Added stripslash_check to the update_option functions
+**/
+
+function stripslash_check($variable) {
+    if ( get_magic_quotes_gpc() ) {
+        $stripped = stripslashes($variable);
+        return $stripped;
+    }else{
+        return $variable;
+    }
+}
+
+
 /**
  * Smart cache-busting
  * http://toscho.de/2008/frisches-layout/#comment-13
  */
 
-if ( !function_exists('fb_css_cache_buster') ) {
+/*if ( !function_exists('fb_css_cache_buster') ) {
         function fb_css_cache_buster($info, $show) {
                 if ($show == 'stylesheet_url') {
 
@@ -405,7 +417,7 @@ if ( !function_exists('fb_css_cache_buster') ) {
         }
 
         add_filter('bloginfo_url', 'fb_css_cache_buster', 9999, 2);
-}
+}*/
 
 // FRONT MENU / LIST PAGES OR CATEGORIES
 
@@ -428,9 +440,9 @@ function lw_header_image(){
 global $lw_top_header_image, $lw_top_header_image_height, $top_header_image_path;
 if($lw_top_header_image == "" || $lw_top_header_image == "true") {
 ?>
-<a name="top" title="<?php bloginfo('name'); ?>" href="<?php bloginfo('url'); ?>"><span id="top" style="background:url('<?php echo $top_header_image_path; ?>') no-repeat;height:<?php echo $lw_top_header_image_height; ?>px"><strong><?php bloginfo('name'); ?></strong></span></a>
+<a name="top" title="<?php bloginfo('name'); ?>" href="<?php echo get_option('home'); ?>"><span id="top" style="background:url('<?php echo $top_header_image_path; ?>') no-repeat;height:<?php echo $lw_top_header_image_height; ?>px"><strong><?php bloginfo('name'); ?></strong></span></a>
 <?php }else{ ?>
-<div id="top"><h1 id="logo"><a name="top" title="<?php bloginfo('name'); ?>" href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?></a> <small><?php bloginfo('description'); ?></small></h1></div>
+<div id="top_cufon"><h1 id="logo"><a name="top" title="<?php bloginfo('name'); ?>" href="<?php echo get_option('home'); ?>"><?php bloginfo('name'); ?></a> <small><?php bloginfo('description'); ?></small></h1></div>
 <?php
 }
 }
@@ -441,7 +453,7 @@ function comment_tabs(){
 if(is_single()||is_page()){
 ?>
 <script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/tabs.js"></script>
-<script type="text/javascript">jQuery(document).ready(function(){jQuery('tabs').tabs({linkClass : 'tabs',containerClass : 'tab-content',linkSelectedClass : 'selected',containerSelectedClass : 'selected',onComplete : function(){}});});</script>
+<script type="text/javascript">jQuery(document).ready(function(){jQuery('tabs').lightword_tabs({linkClass : 'tabs',containerClass : 'tab-content',linkSelectedClass : 'selected',containerSelectedClass : 'selected',onComplete : function(){}});});</script>
 <?php
 }
 }
@@ -453,8 +465,8 @@ if ($lw_cufon_settings == "Extra") {$cufon_extra = 1; $cufon_enabled = 1;}
 
 function cufon_header(){
 global $cufon_enabled, $cufon_extra;
-$cufon_header_script = "\n<script src=\"".get_bloginfo('template_directory')."/js/cufon.js\" type=\"text/javascript\"></script>\n<script src=\"".get_bloginfo('template_directory')."/js/mp.font.js\" type=\"text/javascript\"></script>";
-if($cufon_extra == 1) $cufon_header_script = str_replace("mp.font.js", "extra_mp.font.js", $cufon_header_script);
+$cufon_header_script = "\n<script src=\"".get_bloginfo('url')."/wp-content/themes/lightword/js/cufon-yui.js\" type=\"text/javascript\"></script>\n<script src=\"".get_bloginfo('url')."/wp-content/themes/lightword/js/vera.font.js\" type=\"text/javascript\"></script>";
+if($cufon_extra == 1) $cufon_header_script = str_replace("vera.font.js", "vera_extra.font.js", $cufon_header_script);
 if($cufon_enabled == 1) echo $cufon_header_script;
 }
 
@@ -467,7 +479,7 @@ if($cufon_enabled == 1) echo $cufon_footer_script;
 // HOME BUTTON
 
 function lw_homebtn($homebtn_value){
-global $lw_remove_homebtn; if($lw_remove_homebtn == "false") { if(is_front_page()) $selected="s"; ?><li><a class="<?php echo $selected; ?>" title="<?php echo $homebtn_value; ?>" href="<?php bloginfo('url'); ?>"><span><?php echo $homebtn_value ?></span></a></li>
+global $lw_remove_homebtn; if($lw_remove_homebtn == "false") { if(is_front_page()) $selected="s"; ?><li><a class="<?php echo $selected; ?>" title="<?php echo $homebtn_value; ?>" href="<?php echo get_option('home'); ?>"><span><?php echo $homebtn_value ?></span></a></li>
 <?php
 }
 }
@@ -519,32 +531,22 @@ switch ($lw_sidebox_settings)
 {
 case "Enabled":
 default:
-/* START ENABLED */
 echo "<div class=\"comm_date\"><span class=\"data\"><span class=\"j\">".get_the_time('j')."</span>".get_the_time('M/y')."</span><span class=\"nr_comm\">";
-if(function_exists('dsq_is_installed')) echo "<a class=\"nr_comm_spot\" href=\"".get_permalink()."\">N/A</a>";
-else
 echo "<a class=\"nr_comm_spot\" href=\"".get_permalink()."#comments\">";
 if(!comments_open()) _e('Off','lightword'); else echo fb_get_comment_type_count('comment');
 echo "</a></span></div>\n";
-/* END ENABLED */
 break;
 
 case "Disabled":
-/* START DISABLED */
-/* END DISABLED */
 break;
 
 case "Show only in posts":
-/* START ENABLED */
 if(is_single()){
 echo "<div class=\"comm_date\"><span class=\"data\"><span class=\"j\">".get_the_time('j')."</span>".get_the_time('M/y')."</span><span class=\"nr_comm\">";
-if(function_exists('dsq_is_installed')) echo "<a class=\"nr_comm_spot\" href=\"".get_permalink()."\">N/A</a>";
-else
 echo "<a class=\"nr_comm_spot\" href=\"".get_permalink()."#comments\">";
 if(!comments_open()) _e('Off','lightword'); else echo fb_get_comment_type_count('comment')."</a>";
 echo "</span></div>\n";
 }
-/* END ENABLED */
 break;
 
 case "Show only date":
@@ -565,6 +567,26 @@ break;
 
 } // end switch
 } // end function
+
+function lw_sidebar(){
+global $lw_sidebar_settings, $lw_layout_settings;
+if($lw_layout_settings=="Wider"){
+switch ($lw_sidebar_settings)
+{
+case "One sidebar":
+default:
+break;
+
+case "Two sidebars":
+include (TEMPLATEPATH . '/sidebar-child.php');
+break;
+
+
+
+} // end switch
+}// end if
+} // end function
+
 
 function lw_simple_date(){
 global $lw_sidebox_settings;
@@ -623,9 +645,13 @@ if($lw_remove_rss == "false"){ ?>
 // IE6 PNG CSS FIX
 
 function ie_png_transparency(){
-global $lw_remove_rss, $lw_layout_settings, $lw_sidebox_settings;
+global $lw_remove_rss, $lw_layout_settings, $lw_sidebox_settings, $lw_sidebar_settings;
+
 $lw_layout_wider = "";
-if($lw_layout_settings=="Wider") $lw_layout_wider = "wider/";
+
+if($lw_layout_settings == "Wider") $lw_layout_wider = "wider/";
+if($lw_layout_settings == "Wider" && $lw_sidebar_settings == "Two sidebars") $lw_layout_wider = "wider/two-sidebars/";
+
 echo "\n<!--[if IE 6]><style type=\"text/css\">/*<![CDATA[*/";
 if($lw_remove_rss == "false"){
 echo "#header{background-image: none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='".get_bloginfo('template_directory')."/images/".$lw_layout_wider."content_top.png',sizingMethod='scale'); }";
@@ -647,7 +673,7 @@ echo "/*]]>*/</style><![endif]-->";
 
 function nested_comments($comment, $args, $depth) { $GLOBALS['comment'] = $comment; ?>
 <li <?php comment_class(); ?> id="li-comment-<?php comment_ID() ?>"><div id="comment-<?php comment_ID(); ?>">
-<div class="comment_content"><div class="comment-meta commentmetadata"><div class="alignleft"><?php echo get_avatar($comment,$size='36'); ?></div>
+<div class="comment_content"><div class="comment-meta commentmetadata"><div class="alignleft avatar"><?php echo get_avatar($comment,$size='36'); ?></div>
 <div class="alignleft" style="padding-top:5px;"><strong class="comment_author"><?php comment_author_link() ?></strong><br/><a href="#comment-<?php comment_ID() ?>" title=""><?php comment_date(__('F jS, Y - H:i','lightword')) ?></a> <?php options_comment_link(get_comment_ID()); ?></div><div class="clear"></div></div>
 <?php comment_text() ?>
 <div class="reply"><?php comment_reply_link(array_merge( $args, array('reply_text' => __('( REPLY )','lightword'), 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?></div>
@@ -664,26 +690,61 @@ echo "\n<style type=\"text/css\">\n/*<![CDATA[*/\n".$lw_custom_css."\n /*]]>*/\n
 }
 }
 
-// REMOVE SEARCH WIDGET
-function my_unregister_widgets() {
-unregister_widget('WP_Widget_Search');
+// ADSENSE
+
+function lw_adsense_spot(){
+global $lw_adsense_spot;
+if($lw_adsense_spot){
+echo "<div align=\"center\" id=\"ad_spot\"> ";
+echo $lw_adsense_spot;
+echo "</div>";
+}
 }
 
 // LOCALIZATION
 
 load_theme_textdomain('lightword', get_template_directory() . '/lang');
 
-// ENABLE FUNCTIONS
+// CHRISTMAS JOY
 
+function christmas_joy(){
+global $lw_christmas_joy, $lw_top_header_image;
+if($lw_christmas_joy == "true" && $lw_top_header_image == "false") echo "\n<link rel=\"stylesheet\" href=\"".get_bloginfo('template_directory')."/christmas_joy.css\" type=\"text/css\" />\n";
+}
+
+// DASHBOARD
+
+add_action('wp_dashboard_setup', 'my_custom_dashboard_widgets');
+
+function my_custom_dashboard_widgets() {
+   global $wp_meta_boxes;
+
+   wp_add_dashboard_widget('custom_help_widget', 'LightWord Theme', 'custom_dashboard_help');
+}
+
+function custom_dashboard_help() {
+   echo '<p>Thanks for using LightWord theme.<br/><a class="preview button" href="'.get_bloginfo('url').'/wp-admin/themes.php?page=functions.php" id="post-preview">'.__('LightWord Settings','lightword').'</a><br/></p>';
+}
+
+// SIDEBARD WIDGETS
+
+if ( function_exists('register_sidebar') ) { register_sidebar(array('name' =>'Sidebar','before_widget' => '','after_widget' => '','before_title' => '<h3>','after_title' => '</h3>')); }
+if ( function_exists('register_sidebar') && $lw_sidebar_settings == "Two sidebars") { register_sidebar(array('name' =>'Sidebar Child','before_widget' => '','after_widget' => '','before_title' => '<h3>','after_title' => '</h3>')); }
+
+// WORDPRESS 2.9 FEATURES
+
+if ( function_exists( 'add_theme_support' ) ) add_theme_support( 'post-thumbnails' );
+
+// ENABLE FUNCTIONS
 
 add_action('admin_menu', 'lightword_admin');
 add_action('wp_head',    'cufon_header');
 add_action('wp_head',    'lw_custom_css');
 add_action('wp_head',    'ie_png_transparency');
+add_action('wp_head',    'christmas_joy');
 add_action('wp_footer',  'cufon_footer');
 add_action('wp_footer',  'comment_tabs');
 add_action( 'wp_head', 'canonical_for_comments' );
-add_action('widgets_init', 'my_unregister_widgets');
 add_filter('comments_template', 'legacy_comments');
 
 remove_action('wp_head', 'wp_generator');

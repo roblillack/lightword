@@ -7,8 +7,11 @@
 <title><?php wp_title('&laquo;', true, 'right'); ?><?php bloginfo('name'); ?></title>
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" />
-<?php global $lw_layout_settings; if($lw_layout_settings == "Wider") : ?>
+<?php global $lw_layout_settings,$lw_sidebar_settings; if($lw_layout_settings == "Wider") : ?>
 <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/wider.css" type="text/css" />
+<?php if($lw_sidebar_settings=="Two sidebars"): ?>
+<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/new_sidebar.css" type="text/css" />
+<?php endif; ?>
 <?php else: ?>
 <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/original.css" type="text/css" />
 <?php endif; ?>
